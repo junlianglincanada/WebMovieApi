@@ -89,8 +89,17 @@ namespace WebMovieApi.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var movie = _movieDbContext.Movies.FirstOrDefault(t => t.ID == id);
+            if (movie == null)
+                return NotFound();
+            else
+            {
+                _movieDbContext.Movies.Remove(movie);
+                _movieDbContext.SaveChanges();
+                return new NoContentResult();
+            }
         }
     }
 }
